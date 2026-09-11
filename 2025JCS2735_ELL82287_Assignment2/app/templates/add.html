@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Add Destination{% endblock %}
+
+{% block content %}
+
+<section class="form-page">
+
+    <div class="page-heading">
+
+        <p class="eyebrow">TRAVEL CATALOGUE</p>
+
+        <h1>Add a destination</h1>
+
+        <p>
+            Share a place that other travellers should discover.
+        </p>
+
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        class="destination-form"
+    >
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label for="name">
+                    Destination name *
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    maxlength="100"
+                    value="{{ form.get('name', '') if form else '' }}"
+                    placeholder="e.g. Goa"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="country">
+                    Country *
+                </label>
+
+                <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    required
+                    maxlength="60"
+                    value="{{ form.get('country', '') if form else '' }}"
+                    placeholder="e.g. India"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label for="city">
+                    City *
+                </label>
+
+                <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    required
+                    maxlength="60"
+                    value="{{ form.get('city', '') if form else '' }}"
+                    placeholder="e.g. Goa"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="category">
+                    Category *
+                </label>
+
+                <select
+                    id="category"
+                    name="category"
+                    required
+                >
+
+                    <option value="">Select category</option>
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category }}"
+                            {% if form and form.get('category') == category %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ category }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="budget">
+                Estimated budget (₹) *
+            </label>
+
+            <input
+                type="number"
+                id="budget"
+                name="budget"
+                min="1"
+                required
+                value="{{ form.get('budget', '') if form else '' }}"
+                placeholder="e.g. 50000"
+            >
+
+            <small>
+                Estimated total trip budget in Indian Rupees.
+            </small>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="description">
+                Description *
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="6"
+                minlength="10"
+                maxlength="1000"
+                required
+                placeholder="Describe what makes this destination special..."
+            >{{ form.get('description', '') if form else '' }}</textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="image">
+                Destination image
+            </label>
+
+            <input
+                type="file"
+                id="image"
+                name="image"
+                accept=".jpg,.jpeg,.png,.webp"
+            >
+
+            <small>
+                Optional. JPG, JPEG, PNG or WEBP. Maximum 5 MB.
+            </small>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <a
+                href="{{ url_for('main.index') }}"
+                class="secondary-button"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Add Destination
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+{% endblock %}

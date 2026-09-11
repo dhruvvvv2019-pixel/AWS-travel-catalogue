@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ destination.name }}{% endblock %}
+
+{% block content %}
+
+<section class="detail-page">
+
+    <a href="{{ url_for('main.index') }}" class="back-link">
+        ← Back to destinations
+    </a>
+
+
+    <div class="detail-card">
+
+        {% if destination.image_key %}
+
+            <img
+                src="{{ url_for('main.destination_image', destination_id=destination.destination_id) }}"
+                alt="{{ destination.name }}"
+                class="detail-image"
+            >
+
+        {% else %}
+
+            <div class="detail-placeholder">
+                🌍
+            </div>
+
+        {% endif %}
+
+
+        <div class="detail-content">
+
+            <span class="category-badge">
+                {{ destination.category }}
+            </span>
+
+            <h1>{{ destination.name }}</h1>
+
+            <p class="detail-location">
+                📍 {{ destination.city }},
+                {{ destination.country }}
+            </p>
+
+            <div class="budget-box">
+
+                <span>Estimated trip budget</span>
+
+                <strong>
+                    ₹{{ "{:,}".format(destination.budget|int) }}
+                </strong>
+
+            </div>
+
+
+            <h2>About this destination</h2>
+
+            <p class="detail-description">
+                {{ destination.description }}
+            </p>
+
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'main.delete_destination_route',
+                    destination_id=destination.destination_id
+                ) }}"
+                onsubmit="return confirm(
+                    'Are you sure you want to delete this destination?'
+                );"
+            >
+
+                <button
+                    type="submit"
+                    class="danger-button"
+                >
+                    Delete Destination
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

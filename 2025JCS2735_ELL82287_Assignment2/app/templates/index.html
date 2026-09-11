@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Travel Catalogue{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div>
+        <p class="eyebrow">EXPLORE • DISCOVER • TRAVEL</p>
+
+        <h1>Find your next destination.</h1>
+
+        <p class="hero-text">
+            Browse destinations, compare budgets, and discover
+            places worth visiting.
+        </p>
+    </div>
+
+    <a href="{{ url_for('main.add_destination') }}"
+       class="primary-button">
+        + Add Destination
+    </a>
+</section>
+
+
+<section class="filter-card">
+
+    <div class="section-heading">
+        <h2>Filter destinations</h2>
+        <span>{{ destinations|length }} result(s)</span>
+    </div>
+
+    <form method="GET" action="{{ url_for('main.index') }}"
+          class="filter-form">
+
+        <div class="form-group">
+            <label for="country">Country</label>
+
+            <select name="country" id="country">
+                <option value="">All countries</option>
+
+                {% for country in countries %}
+                    <option value="{{ country }}"
+                        {% if selected_country == country %}
+                            selected
+                        {% endif %}>
+                        {{ country }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="category">Category</label>
+
+            <select name="category" id="category">
+
+                <option value="">All categories</option>
+
+                {% for category in categories %}
+                    <option value="{{ category }}"
+                        {% if selected_category == category %}
+                            selected
+                        {% endif %}>
+                        {{ category }}
+                    </option>
+                {% endfor %}
+
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="max_budget">Maximum budget (₹)</label>
+
+            <input
+                type="number"
+                name="max_budget"
+                id="max_budget"
+                min="1"
+                placeholder="e.g. 50000"
+                value="{{ max_budget }}"
+            >
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button type="submit" class="primary-button">
+                Filter
+            </button>
+
+            <a href="{{ url_for('main.index') }}"
+               class="secondary-button">
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="destinations-section">
+
+    {% if destinations %}
+
+        <div class="destination-grid">
+
+            {% for destination in destinations %}
+
+                <article class="destination-card">
+
+                    {% if destination.image_url %}
+
+                        <img
+                            src="{{ url_for('main.destination_image', destination_id=destination.destination_id) }}"
+                            alt="{{ destination.name }}"
+                            class="destination-image"
+                        >
+
+                    {% else %}
+
+                        <div class="image-placeholder">
+                            🌍
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-content">
+
+                        <span class="category-badge">
+                            {{ destination.category }}
+                        </span>
+
+                        <h3>{{ destination.name }}</h3>
+
+                        <p class="location">
+                            📍 {{ destination.city }},
+                            {{ destination.country }}
+                        </p>
+
+                        <p class="description">
+                            {{ destination.description }}
+                        </p>
+
+                        <div class="card-footer">
+
+                            <strong>
+                                ₹{{ "{:,}".format(destination.budget|int) }}
+                            </strong>
+
+                            <a href="{{ url_for(
+                                'main.destination_detail',
+                                destination_id=destination.destination_id
+                            ) }}">
+                                View →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon">🗺️</div>
+
+            <h2>No destinations found</h2>
+
+            <p>
+                Try changing your filters or add a new destination.
+            </p>
+
+            <a href="{{ url_for('main.add_destination') }}"
+               class="primary-button">
+                Add First Destination
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
